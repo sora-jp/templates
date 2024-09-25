@@ -5,6 +5,20 @@
   outputs = { self, nixpkgs, utils }: utils.lib.eachDefaultSystem (system:
     let
       pkgs = nixpkgs.legacyPackages.${system};
+      picotool-v2 = with pkgs; picotool.overrideAttrs(oldAttrs: rec {
+        pname = "picotool";
+        version = "2.0.0";
+        src = fetchFromGitHub {
+          fetchSubmodules = true;
+          owner = "raspberrypi";
+          repo = pname;
+          rev = version;
+          sha256 = "sha256-z7EFk3qxg1PoKZQpUQqjhttZ2RkhhhiMdYc9TkXzkwk=";
+        };
+
+        buildInputs = [pico-sdk-tusb libusb1];
+        cmakeFlags = [ "-DPICO_SDK_PATH=${pico-sdk-tusb}/lib/pico-sdk" ];
+      });
       pico-sdk-tusb = with pkgs; pico-sdk.overrideAttrs(oldAttrs:
         rec {
           pname = "pico-sdk";
@@ -50,7 +64,7 @@
           just
 
           # Uploading
-          picotool
+          picotool-v2
 
           # Debugging
           usbutils
