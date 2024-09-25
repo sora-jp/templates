@@ -1,0 +1,6 @@
+.direnv/
+
+# Build artefacts
+compile_commands.json
+build/
+generated/
