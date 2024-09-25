@@ -8,7 +8,7 @@
       subdirs = nixpkgs.lib.attrsets.filterAttrs
         (n: v: v == "directory" && builtins.substring 0 1 n != ".")
         (builtins.readDir ./.);
-      mkTemplate = tdir: _: { "${tdir}" = {path = ./. + tdir; description = "Auto-generated template"; }; };
+      mkTemplate = tdir: _: { "${tdir}" = {path = ./. + "/${tdir}"; description = "Auto-generated template"; }; };
       templates = nixpkgs.lib.attrsets.concatMapAttrs mkTemplate subdirs;
     in
       (utils.lib.eachDefaultSystem (system:
